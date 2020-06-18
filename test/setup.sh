@@ -1,10 +1,15 @@
 #!/bin/bash
 
+branch=master
+if [ ! -z "$1" ]; then
+  branch=$1
+fi
+
 #============================
 # basic installation
 #============================
 DEBIAN_FRONTEND=noninteractive apt-get -y install git ansible locales tzdata sudo || exit -1
-git clone https://github.com/ICCM-EU/BOF.git || exit -1
+git clone https://github.com/ICCM-EU/BOF.git -b $branch || exit -1
 cd BOF/ansible
 # perhaps update group_vars/all.yml with the actual timezone
 ansible-playbook playbook.yml -i localhost || exit -1
