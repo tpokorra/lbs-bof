@@ -19,6 +19,8 @@ cd /var/www/bof
 npm install cypress || exit -1
 apt-get -y install xvfb gconf2 libgtk2.0-0 libgtk3.0 libxtst6 libxss1 libnss3 libasound2 || exit -1
 LANG=en CYPRESS_baseUrl=http://localhost ./node_modules/.bin/cypress run --config video=false --spec 'cypress/integration/nomination.js' || exit -1
+sed -i "s/i < 60/i < 20/g" cypress/integration/voting.js
+sed -i "s/topic < 14/topic < 7/g" cypress/integration/voting.js
 LANG=en CYPRESS_baseUrl=http://localhost ./node_modules/.bin/cypress run --config video=false --spec 'cypress/integration/voting.js' || exit -1
 
 exit 0
