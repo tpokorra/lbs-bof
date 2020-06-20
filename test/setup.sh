@@ -36,7 +36,17 @@ LANG=en CYPRESS_baseUrl=http://localhost ./node_modules/.bin/cypress run --confi
 #======================
 # run the PHPUnit tests
 #======================
+# on ubuntu bionic, we only have php7.2, but we need php7.3 for PHPUnit and dependancies.
+if [[ "`php --version | head -n 1 | grep "PHP 7.2"`" != "" ]]
+then
+  apt-get install -y software-properties-common
+  add-apt-repository ppa:ondrej/php
+  apt-get update
+  apt-get install -y php7.3 php7.3-dom php7.3-mbstring php7.3-xdebug php7.3-pdo-sqlite
+fi
+
 cd /var/www/bof/src
+composer install --dev
 ./vendor/bin/phpunit -c phpunit.xml || exit -1
 
 exit 0
