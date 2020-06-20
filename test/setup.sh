@@ -15,7 +15,8 @@ mkdir -p /var/www
 cp -R BOF /var/www/bof
 cd BOF/ansible
 # perhaps update group_vars/all.yml with the actual timezone
-ansible-playbook playbook.yml -i localhost || exit -1
+# python3: on Ubuntu Bionic, force python3, to make creation of mysql db work (otherwise it complains: "The MySQL-python module is required")
+ansible-playbook playbook.yml -i localhost -e 'ansible_python_interpreter=/usr/bin/python3' || exit -1
 cd /root
 rm -Rf BOF
 ln -s /var/www/bof
