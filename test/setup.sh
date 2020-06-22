@@ -36,6 +36,9 @@ LANG=en CYPRESS_baseUrl=http://localhost ./node_modules/.bin/cypress run --confi
 #======================
 # run the PHPUnit tests
 #======================
+# also install the packages needed for the tests
+cd /var/www/bof/ansible
+ansible-playbook playbook.yml -i localhost -e 'ansible_python_interpreter=/usr/bin/python3' --extra-vars "dev=1" || exit -1
 # on ubuntu bionic, we only have php7.2, but we need php7.3 for PHPUnit and dependancies.
 if [[ "`php --version | head -n 1 | grep "PHP 7.2"`" != "" ]]
 then
