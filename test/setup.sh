@@ -45,7 +45,7 @@ then
   apt-get install -y software-properties-common
   add-apt-repository ppa:ondrej/php
   apt-get update
-  apt-get install -y php7.3 php7.3-dom php7.3-mbstring php7.3-xdebug php7.3-pdo-sqlite
+  apt-get install -y php7.4 php7.4-dom php7.4-mbstring php7.4-xdebug php7.4-pdo-sqlite
 fi
 
 cd /var/www/bof/src
