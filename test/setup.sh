@@ -38,6 +38,16 @@ LANG=en CYPRESS_baseUrl=http://localhost ./node_modules/.bin/cypress run --confi
 #======================
 # also install the packages needed for the tests
 cd /var/www/bof/ansible
+
+# on debian buster, we only have ansible2.7, but we need ansible2.9 due to a bug in mysql_user not being able to be rerun
+if [[ "`ansible --version | head -n 1 | grep "ansible 2.7"`" != "" ]]
+then
+  echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main" >> /etc/apt/sources.list
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+  apt-get update
+  apt-get -y dist-upgrade
+fi
+
 ansible-playbook playbook.yml -i localhost -e 'ansible_python_interpreter=/usr/bin/python3' --extra-vars "dev=1" || exit -1
 # on ubuntu bionic, we only have php7.2, but we need php7.3 for PHPUnit and dependancies.
 if [[ "`php --version | head -n 1 | grep "PHP 7.2"`" != "" ]]
