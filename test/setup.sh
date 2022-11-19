@@ -10,10 +10,13 @@ fi
 #============================
 DEBIAN_FRONTEND=noninteractive apt-get -y install git ansible locales tzdata sudo php || exit -1
 
+git clone https://github.com/ICCM-EU/BOF.git -b $branch || exit -1
+
 # on ubuntu bionic, we only have php7.2, but we need php7.3 for PHPUnit and dependancies.
 # on debian buster, we only have php7.3, but we need php7.4 for composer dependancies
 if [[ "`php --version | head -n 1 | grep -E "PHP 7.2|PHP 7.3"`" != "" ]]
 then
+  sed -i "s/php_version:.*/php_version: 7.4/g" BOF/ansible/group_vars/all.yml
   apt-get install -y software-properties-common
   . /etc/os-release
   OS=$NAME
@@ -28,7 +31,6 @@ then
   apt-get install -y php7.4 php7.4-dom php7.4-mbstring php7.4-xdebug php7.4-pdo-sqlite
 fi
 
-git clone https://github.com/ICCM-EU/BOF.git -b $branch || exit -1
 # we want to use the same branch for the real installation, not download the master branch in ansible
 mkdir -p /var/www
 cp -R BOF /var/www/bof
