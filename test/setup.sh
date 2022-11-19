@@ -15,7 +15,15 @@ DEBIAN_FRONTEND=noninteractive apt-get -y install git ansible locales tzdata sud
 if [[ "`php --version | head -n 1 | grep -E "PHP 7.2|PHP 7.3"`" != "" ]]
 then
   apt-get install -y software-properties-common
-  add-apt-repository ppa:ondrej/php
+  . /etc/os-release
+  OS=$NAME
+  if [[ "$OS" == "Ubuntu" ]]; then
+	add-apt-repository ppa:ondrej/php
+  fi
+  if [[ "$OS" == "Debian GNU/Linux" ]]; then
+	wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+	echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+  fi
   apt-get update
   apt-get install -y php7.4 php7.4-dom php7.4-mbstring php7.4-xdebug php7.4-pdo-sqlite
 fi
