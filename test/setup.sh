@@ -8,7 +8,7 @@ fi
 #============================
 # basic installation
 #============================
-DEBIAN_FRONTEND=noninteractive apt-get -y install git ansible locales tzdata sudo || exit -1
+DEBIAN_FRONTEND=noninteractive apt-get -y install git ansible locales tzdata sudo php || exit -1
 
 # on ubuntu bionic, we only have php7.2, but we need php7.3 for PHPUnit and dependancies.
 # on debian buster, we only have php7.3, but we need php7.4 for composer dependancies
