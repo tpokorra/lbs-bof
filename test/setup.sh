@@ -40,6 +40,14 @@ cd /root
 rm -Rf BOF
 ln -s /var/www/bof
 
+if [ -f /etc/apache2/mods-enabled/php7.3.conf ]; then
+  a2dismod php7.3
+fi
+if [ -f /etc/apache2/mods-available/php8.1.conf ]; then
+  a2enmod php8.1
+fi
+systemctl restart apache2
+
 #================================
 # setup cypress and run the tests
 #================================
