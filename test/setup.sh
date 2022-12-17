@@ -50,6 +50,9 @@ fi
 if [ -f /etc/apache2/mods-available/php8.1.conf ]; then
   a2enmod php8.1
 fi
+if [ -f /etc/apache2/mods-available/php8.2.conf ]; then
+  a2enmod php8.2
+fi
 systemctl restart apache2
 
 #================================
