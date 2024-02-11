@@ -5,6 +5,9 @@ if [ ! -z "$1" ]; then
   branch=$1
 fi
 
+# Ansible requires the locale encoding to be UTF-8; Detected None.
+export LANG=en_US.UTF-8
+
 #============================
 # basic installation
 #============================
@@ -38,8 +41,7 @@ mkdir -p /var/www
 cp -R BOF /var/www/bof
 cd BOF/ansible
 # perhaps update group_vars/all.yml with the actual timezone
-# python3: on Ubuntu Bionic, force python3, to make creation of mysql db work (otherwise it complains: "The MySQL-python module is required")
-ansible-playbook playbook.yml -i localhost -e 'ansible_python_interpreter=/usr/bin/python3' || exit -1
+ansible-playbook playbook.yml -i localhost || exit -1
 cd /root
 rm -Rf BOF
 ln -s /var/www/bof
@@ -82,7 +84,7 @@ then
   apt-get -y dist-upgrade
 fi
 
-ansible-playbook playbook.yml -i localhost -e 'ansible_python_interpreter=/usr/bin/python3' --extra-vars "dev=1" || exit -1
+ansible-playbook playbook.yml -i localhost --extra-vars "dev=1" || exit -1
 
 cd /var/www/bof/src
 composer install --dev
