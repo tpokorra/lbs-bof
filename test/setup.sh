@@ -5,9 +5,6 @@ if [ ! -z "$1" ]; then
   branch=$1
 fi
 
-# Ansible requires the locale encoding to be UTF-8; Detected None.
-export LANG=en_US.UTF-8
-
 #============================
 # basic installation
 #============================
@@ -40,7 +37,11 @@ fi
 mkdir -p /var/www
 cp -R BOF /var/www/bof
 cd BOF/ansible
-# perhaps update group_vars/all.yml with the actual timezone
+
+# Ansible requires the locale encoding to be UTF-8; Detected None.
+export LC_ALL=en_US.UTF-8
+
+# TODO perhaps update group_vars/all.yml with the actual timezone
 ansible-playbook playbook.yml -i localhost || exit -1
 cd /root
 rm -Rf BOF
@@ -74,15 +75,6 @@ LANG=en CYPRESS_baseUrl=http://localhost ./node_modules/.bin/cypress run --confi
 #======================
 # also install the packages needed for the tests
 cd /var/www/bof/ansible
-
-# on debian buster, we only have ansible2.7, but we need ansible2.9 due to a bug in mysql_user not being able to be rerun
-if [[ "`ansible --version | head -n 1 | grep "ansible 2.7"`" != "" ]]
-then
-  echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main" >> /etc/apt/sources.list
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
-  apt-get update
-  apt-get -y dist-upgrade
-fi
 
 ansible-playbook playbook.yml -i localhost --extra-vars "dev=1" || exit -1
 
