@@ -20,15 +20,15 @@ then
   . /etc/os-release
   OS=$NAME
   if [[ "$OS" == "Ubuntu" ]]; then
-	add-apt-repository ppa:ondrej/php
+    add-apt-repository ppa:ondrej/php
   fi
   if [[ "$OS" == "Debian GNU/Linux" ]]; then
-	wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-	echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+    wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+    echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
 
-	wget -O composer-setup.php https://getcomposer.org/installer
-	php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-	export PATH=/user/local/bin:$PATH
+    wget -O composer-setup.php https://getcomposer.org/installer
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    export PATH=/user/local/bin:$PATH
   fi
   apt-get update
 fi
@@ -63,7 +63,14 @@ systemctl restart apache2
 #================================
 cd /var/www/bof
 npm install cypress || exit -1
-apt-get -y install xvfb libgtk2.0-0 libgtk3.0 libxtst6 libxss1 libnss3 libasound2t64 libgbm-dev || exit -1
+
+OS=$NAME
+LIBASOUND=libasound2
+if [[ "$OS" == "Ubuntu" ]]; then
+  LIBASOUND=libasound2t64
+fi
+
+apt-get -y install xvfb libgtk2.0-0 libgtk3.0 libxtst6 libxss1 libnss3 $LIBASOUND libgbm-dev || exit -1
 LANG=en CYPRESS_baseUrl=http://localhost ./node_modules/.bin/cypress run --config video=false --spec 'cypress/integration/nomination.js' || exit -1
 sed -i "s/i < 60/i < 20/g" cypress/integration/voting.js
 sed -i "s/topic < 14/topic < 7/g" cypress/integration/voting.js
