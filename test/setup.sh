@@ -64,6 +64,7 @@ systemctl restart apache2
 cd /var/www/bof
 npm install cypress || exit -1
 
+. /etc/os-release
 OS=$NAME
 LIBASOUND=libasound2
 if [[ "$OS" == "Ubuntu" ]]; then
